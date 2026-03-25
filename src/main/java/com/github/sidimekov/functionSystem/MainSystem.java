@@ -1,11 +1,12 @@
 package com.github.sidimekov.functionSystem;
 
+import com.github.sidimekov.Function;
 import com.github.sidimekov.csv.CsvWriter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainSystem {
+public class MainSystem implements Function {
     private final TrigModule trigModule;
     private final LogModule logModule;
 
@@ -14,11 +15,13 @@ public class MainSystem {
         logModule = new LogModule(eps);
     }
 
+    @Override
     public double compute(double x) {
         if (x <= 0) return trigModule.compute(x);
         else return logModule.compute(x);
     }
 
+    @Override
     public void computeAndSaveCsv(double start, double end, double step, String filePath) {
         List<String[]> rows = new ArrayList<>();
         rows.add(new String[]{"X","MainResult"});
