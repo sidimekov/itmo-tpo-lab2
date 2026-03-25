@@ -1,13 +1,9 @@
 package com.github.sidimekov.functionSystem;
 
-import com.github.sidimekov.Function;
-import com.github.sidimekov.csv.CsvWriter;
+import com.github.sidimekov.AbstractFunction;
 import com.github.sidimekov.logFunction.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class LogModule implements Function {
+public class LogModule extends AbstractFunction {
     private final Ln ln;
     private final Log2 log2;
     private final Log3 log3;
@@ -24,34 +20,17 @@ public class LogModule implements Function {
         double log2V = log2.compute(x);
         double log3V = log3.compute(x);
 
-        double part1 = Math.pow(Math.pow(log3V,2),3) - lnV + log2V;
-        double part2 = (log3V + (log3V - lnV)) - Math.pow(log2V,3);
-        return part1 + part2;
+        if (Double.isNaN(lnV) || Double.isNaN(log2V) || Double.isNaN(log3V)) {
+            return Double.NaN;
+        }
+
+        return (((Math.pow(Math.pow(log3V, 2), 3) - lnV) + log2V)
+                + ((log3V + (log3V - lnV)) - Math.pow(log2V, 3)));
     }
 
     @Override
-    public void computeAndSaveCsv(double start, double end, double step, String filePath) {
-        List<String[]> rows = new ArrayList<>();
-        rows.add(new String[]{"X","Ln","Log2","Log3","LogModule"});
-        for (double x = start; x <= end; x += step) {
-            if (x <= 0) {
-                rows.add(new String[]{String.valueOf(x),"NaN","NaN","NaN","NaN"});
-                continue;
-            }
-            double lnV = ln.compute(x);
-            double log2V = log2.compute(x);
-            double log3V = log3.compute(x);
-            double logRes = compute(x);
-
-            rows.add(new String[]{
-                    String.valueOf(x),
-                    String.valueOf(lnV),
-                    String.valueOf(log2V),
-                    String.valueOf(log3V),
-                    String.valueOf(logRes)
-            });
-        }
-        CsvWriter.writeCsv(filePath, rows, ",");
+    protected String getFunctionName() {
+        return "LogModule";
     }
 
     public Ln getLn() { return ln; }

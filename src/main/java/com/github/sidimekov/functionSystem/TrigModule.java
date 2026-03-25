@@ -1,13 +1,9 @@
 package com.github.sidimekov.functionSystem;
 
-import com.github.sidimekov.Function;
-import com.github.sidimekov.csv.CsvWriter;
+import com.github.sidimekov.AbstractFunction;
 import com.github.sidimekov.trigFunction.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TrigModule implements Function {
+public class TrigModule extends AbstractFunction {
     private final Sin sin;
     private final Cos cos;
     private final Cot cot;
@@ -30,40 +26,17 @@ public class TrigModule implements Function {
         double secV = sec.compute(x);
         double cscV = csc.compute(x);
 
-        double trigRes = (((((sinV + cotV) * cosV) - secV) + Math.pow(secV,3)) + cscV);
-
-        // Если хоть одно значение NaN, возвращаем NaN для всего результата
-        if (Double.isNaN(sinV) || Double.isNaN(cosV) || Double.isNaN(cotV)
-                || Double.isNaN(secV) || Double.isNaN(cscV)) {
+        if (Double.isNaN(sinV) || Double.isNaN(cosV) ||
+                Double.isNaN(cotV) || Double.isNaN(secV) || Double.isNaN(cscV)) {
             return Double.NaN;
         }
 
-        return trigRes;
+        return (((((sinV + cotV) * cosV) - secV) + Math.pow(secV, 3)) + cscV);
     }
 
     @Override
-    public void computeAndSaveCsv(double start, double end, double step, String filePath) {
-        List<String[]> rows = new ArrayList<>();
-        rows.add(new String[]{"X","Sin","Cos","Cot","Sec","Csc","TrigModule"});
-        for (double x = start; x <= end; x += step) {
-            double sinV = sin.compute(x);
-            double cosV = cos.compute(x);
-            double cotV = cot.compute(x);
-            double secV = sec.compute(x);
-            double cscV = csc.compute(x);
-            double trigRes = compute(x);
-
-            rows.add(new String[]{
-                    String.valueOf(x),
-                    String.valueOf(sinV),
-                    String.valueOf(cosV),
-                    String.valueOf(cotV),
-                    String.valueOf(secV),
-                    String.valueOf(cscV),
-                    String.valueOf(trigRes)
-            });
-        }
-        CsvWriter.writeCsv(filePath, rows, ",");
+    protected String getFunctionName() {
+        return "TrigModule";
     }
 
     public Sin getSin() { return sin; }

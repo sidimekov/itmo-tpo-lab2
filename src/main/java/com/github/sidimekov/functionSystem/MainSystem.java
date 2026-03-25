@@ -1,40 +1,31 @@
 package com.github.sidimekov.functionSystem;
 
-import com.github.sidimekov.Function;
-import com.github.sidimekov.csv.CsvWriter;
+import com.github.sidimekov.AbstractFunction;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MainSystem extends AbstractFunction {
 
-public class MainSystem implements Function {
-    private final TrigModule trigModule;
-    private final LogModule logModule;
+    private final TrigModule trig;
+    private final LogModule log;
 
     public MainSystem(double eps) {
-        trigModule = new TrigModule(eps);
-        logModule = new LogModule(eps);
+        this.trig = new TrigModule(eps);
+        this.log = new LogModule(eps);
     }
 
     @Override
     public double compute(double x) {
-        if (x <= 0) return trigModule.compute(x);
-        else return logModule.compute(x);
+        if (x <= 0) {
+            return trig.compute(x);
+        } else {
+            return log.compute(x);
+        }
     }
 
     @Override
-    public void computeAndSaveCsv(double start, double end, double step, String filePath) {
-        List<String[]> rows = new ArrayList<>();
-        rows.add(new String[]{"X","MainResult"});
-        for (double x = start; x <= end; x += step) {
-            double mainRes = compute(x);
-            rows.add(new String[]{
-                    String.valueOf(x),
-                    String.valueOf(mainRes)
-            });
-        }
-        CsvWriter.writeCsv(filePath, rows, ",");
+    protected String getFunctionName() {
+        return "MainSystem";
     }
 
-    public TrigModule getTrigModule() { return trigModule; }
-    public LogModule getLogModule() { return logModule; }
+    public TrigModule getTrigModule() { return trig; }
+    public LogModule getLogModule() { return log; }
 }
