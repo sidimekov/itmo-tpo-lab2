@@ -5,15 +5,13 @@ import java.io.IOException;
 import java.util.List;
 
 public class CsvWriter {
-    public static void writeCsv(String filePath, List<Double> xs, List<Double> results, String delimiter) throws IOException {
-        try (FileWriter writer = new FileWriter(filePath)) {
-            writer.append("X").append(delimiter).append("Result").append("\n");
-            for (int i = 0; i < xs.size(); i++) {
-                writer.append(xs.get(i).toString())
-                        .append(delimiter)
-                        .append(results.get(i).toString())
-                        .append("\n");
+    public static void writeCsv(String file, List<String[]> rows, String delim) {
+        try (FileWriter w = new FileWriter(file)) {
+            for (String[] row : rows) {
+                w.append(String.join(delim, row)).append("\n");
             }
+        } catch (IOException e) {
+            System.err.println("CSV write error: " + e.getMessage());
         }
     }
 }

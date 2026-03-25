@@ -1,56 +1,41 @@
 package com.github.sidimekov;
 
-import com.github.sidimekov.csv.CsvWriter;
 import com.github.sidimekov.functionSystem.MainSystem;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
-        System.out.println("Введите начальное значение x:");
-        double start = scanner.nextDouble();
+        System.out.print("Start: "); double start = sc.nextDouble();
+        System.out.print("End: "); double end = sc.nextDouble();
+        System.out.print("Step: "); double step = sc.nextDouble();
+        System.out.print("Eps: "); double eps = sc.nextDouble();
 
-        System.out.println("Введите конечное значение x:");
-        double end = scanner.nextDouble();
+        MainSystem system = new MainSystem(eps);
 
-        System.out.println("Введите шаг:");
-        double step = scanner.nextDouble();
+        // Тригонометрические функции
+        system.getTrigModule().getSin().computeAndSaveCsv(start,end,step,"result/Sin.csv");
+        system.getTrigModule().getCos().computeAndSaveCsv(start,end,step,"result/Cos.csv");
+        system.getTrigModule().getCot().computeAndSaveCsv(start,end,step,"result/Cot.csv");
+        system.getTrigModule().getSec().computeAndSaveCsv(start,end,step,"result/Sec.csv");
+        system.getTrigModule().getCsc().computeAndSaveCsv(start,end,step,"result/Csc.csv");
 
-        System.out.println("Введите точность (eps):");
-        double eps = scanner.nextDouble();
+        // Модуль TrigModule
+        system.getTrigModule().computeAndSaveCsv(start,end,step,"result/TrigModule.csv");
 
-        MainSystem systemFunction = new MainSystem(eps);
+        // Логарифмические функции
+        system.getLogModule().getLn().computeAndSaveCsv(start,end,step,"result/Ln.csv");
+        system.getLogModule().getLog2().computeAndSaveCsv(start,end,step,"result/Log2.csv");
+        system.getLogModule().getLog3().computeAndSaveCsv(start,end,step,"result/Log3.csv");
 
-        List<Double> xs = new ArrayList<>();
-        List<Double> results = new ArrayList<>();
+        // Модуль LogModule
+        system.getLogModule().computeAndSaveCsv(start,end,step,"result/LogModule.csv");
 
-        for (double x = start; x <= end; x += step) {
-            try {
-                double y = systemFunction.compute(x);
-                xs.add(x);
-                results.add(y);
-                System.out.printf("x=%.6f, f(x)=%.6f%n", x, y);
-            } catch (ArithmeticException e) {
-                System.out.printf("x=%.6f, ошибка: %s%n", x, e.getMessage());
-            }
-        }
+        // Итоговая система
+        system.computeAndSaveCsv(start,end,step,"result/MainSystem.csv");
 
-        System.out.println("Введите путь для CSV файла (например, output.csv):");
-        String filePath = scanner.next();
-
-        System.out.println("Введите разделитель CSV (например, , или ;):");
-        String delimiter = scanner.next();
-
-        try {
-            CsvWriter.writeCsv(filePath, xs, results, delimiter);
-            System.out.println("CSV файл успешно создан: " + filePath);
-        } catch (IOException e) {
-            System.err.println("Ошибка записи CSV: " + e.getMessage());
-        }
+        System.out.println("Все CSV файлы успешно созданы!");
     }
 }
