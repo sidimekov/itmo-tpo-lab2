@@ -1,19 +1,31 @@
 package com.github.sidimekov.functionSystem;
 
-public class MainSystem {
-    private final TrigModule trigModule;
-    private final LogModule logModule;
+import com.github.sidimekov.AbstractFunction;
+
+public class MainSystem extends AbstractFunction {
+
+    private final TrigModule trig;
+    private final LogModule log;
 
     public MainSystem(double eps) {
-        this.trigModule = new TrigModule(eps);
-        this.logModule = new LogModule(eps);
+        this.trig = new TrigModule(eps);
+        this.log = new LogModule(eps);
     }
 
+    @Override
     public double compute(double x) {
         if (x <= 0) {
-            return trigModule.compute(x);
+            return trig.compute(x);
         } else {
-            return logModule.compute(x);
+            return log.compute(x);
         }
     }
+
+    @Override
+    protected String getFunctionName() {
+        return "MainSystem";
+    }
+
+    public TrigModule getTrigModule() { return trig; }
+    public LogModule getLogModule() { return log; }
 }

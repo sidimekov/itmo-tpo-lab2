@@ -1,9 +1,23 @@
 package com.github.sidimekov.trigFunction;
 
-public class Sec {
-    public static double compute(double x, double eps) {
-        double cos = Cos.compute(x, eps);
-        if (cos == 0) throw new ArithmeticException("Secant undefined for x = " + x);
-        return 1 / cos;
+import com.github.sidimekov.AbstractFunction;
+
+public class Sec extends AbstractFunction {
+    private final Cos cos;
+
+    public Sec(Cos cos) {
+        this.cos = cos;
+    }
+
+    @Override
+    public double compute(double x) {
+        double c = cos.compute(x);
+        if (Math.abs(c) < 1e-12) return Double.NaN;
+        return 1 / c;
+    }
+
+    @Override
+    protected String getFunctionName() {
+        return "Sec";
     }
 }

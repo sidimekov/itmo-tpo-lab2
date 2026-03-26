@@ -1,7 +1,26 @@
 package com.github.sidimekov.logFunction;
 
-public class Log3 {
-    public static double compute(double x, double eps) {
-        return Ln.compute(x, eps) / Ln.compute(3, eps);
+import com.github.sidimekov.AbstractFunction;
+
+public class Log3 extends AbstractFunction {
+    private final Ln ln;
+
+    public Log3(Ln ln) {
+        this.ln = ln;
+    }
+
+    @Override
+    public double compute(double x) {
+        double lnX = ln.compute(x);
+        double ln3 = ln.compute(3);
+
+        if (Double.isNaN(lnX)) return Double.NaN;
+
+        return lnX / ln3;
+    }
+
+    @Override
+    protected String getFunctionName() {
+        return "Log3";
     }
 }

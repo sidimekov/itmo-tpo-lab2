@@ -1,13 +1,25 @@
 package com.github.sidimekov.trigFunction;
 
-public class Cos {
-    public static double compute(double x, double eps) {
-        double sin = Sin.compute(x, eps);
+import com.github.sidimekov.AbstractFunction;
 
-        if (x >= -Math.PI / 2 && x <= 0) {
-            return Math.sqrt(1 - sin * sin);
-        } else {
-            return -Math.sqrt(1 - sin * sin);
-        }
+public class Cos extends AbstractFunction {
+    private final Sin sin;
+
+    public Cos(Sin sin) {
+        this.sin = sin;
+    }
+
+    @Override
+    public double compute(double x) {
+        double s = sin.compute(x);
+        if (x >= -Math.PI/2 && x <= Math.PI/2)
+            return Math.sqrt(1 - s * s);
+        else
+            return -Math.sqrt(1 - s * s);
+    }
+
+    @Override
+    protected String getFunctionName() {
+        return "Cos";
     }
 }
