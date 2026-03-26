@@ -1,44 +1,60 @@
 package com.github.sidimekov.integration.trigFunction;
 
-import com.github.sidimekov.trigFunction.*;
-import org.junit.jupiter.api.Test;
+import com.github.sidimekov.trigFunction.Csc;
+import com.github.sidimekov.trigFunction.Sin;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CscIntegTest {
 
-    @Mock Sin sin;
+    private static final MathContext MC = new MathContext(9);
 
-    @Test
-    void shouldCallSin() {
-        when(sin.compute(anyDouble())).thenReturn(1.0);
+    @Mock
+    private Sin mockSin;
 
-        Csc csc = new Csc(sin);
-        csc.compute(1);
+    private Sin spySin;
+    private Csc spyCsc;
 
-        verify(sin, atLeastOnce()).compute(anyDouble());
+    @BeforeEach
+    void setUp() {
+        spySin = spy(new Sin(1e-6));
+        spyCsc = spy(new Csc(spySin));
     }
 
     @Test
-    void shouldComputeCorrectly() {
-        double x = 1;
+    @DisplayName("Test 1: Call csc via spy")
+    void shouldCallCscFunction() {
+        spyCsc.compute(1.234);
+        verify(spyCsc, atLeastOnce()).compute(anyDouble());
+        verify(spySin, atLeastOnce()).compute(anyDouble());
+    }
 
-        when(sin.compute(x)).thenReturn(Math.sin(x));
+    @ParameterizedTest(name = "mock.csc({0}) = {1}")
+    @CsvFileSource(resources = "/Csc.csv", numLinesToSkip = 1, delimiter = ',')
+    void shouldCallCscFunctionWithMock(double x, String expectedStr) {
+        double expected = "NaN".equals(expectedStr) ? Double.NaN : Double.parseDouble(expectedStr);
 
-        Csc csc = new Csc(sin);
+        lenient().when(mockSin.compute(x)).thenReturn(Math.sin(x));
+
+        Csc csc = new Csc(mockSin);
         double result = csc.compute(x);
 
-        assertEquals(1 / Math.sin(x), result, 1e-3);
-    }
-
-    @Test
-    void shouldReturnNaN() {
-        when(sin.compute(anyDouble())).thenReturn(0.0);
-
-        assertTrue(Double.isNaN(new Csc(sin).compute(1)));
+        if (Double.isNaN(expected)) {
+            assertTrue(Double.isNaN(result));
+        } else {
+            assertEquals(BigDecimal.valueOf(expected).round(MC),
+                    BigDecimal.valueOf(result).round(MC));
+        }
     }
 }
