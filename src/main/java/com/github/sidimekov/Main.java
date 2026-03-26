@@ -16,25 +16,25 @@ public class Main {
         MainSystem system = new MainSystem(eps);
 
         // Тригонометрические функции
-        system.getTrigModule().getSin().computeAndSaveCsv(start,end,step,"result/Sin.csv");
-        system.getTrigModule().getCos().computeAndSaveCsv(start,end,step,"result/Cos.csv");
-        system.getTrigModule().getCot().computeAndSaveCsv(start,end,step,"result/Cot.csv");
-        system.getTrigModule().getSec().computeAndSaveCsv(start,end,step,"result/Sec.csv");
-        system.getTrigModule().getCsc().computeAndSaveCsv(start,end,step,"result/Csc.csv");
+        system.getTrigModule().getSin().computeAndSaveCsv(start,end,step,"resources/Sin.csv");
+        system.getTrigModule().getCos().computeAndSaveCsv(start,end,step,"resources/Cos.csv");
+        system.getTrigModule().getCot().computeAndSaveCsv(start,end,step,"resources/Cot.csv");
+        system.getTrigModule().getSec().computeAndSaveCsv(start,end,step,"resources/Sec.csv");
+        system.getTrigModule().getCsc().computeAndSaveCsv(start,end,step,"resources/Csc.csv");
 
         // Модуль TrigModule
-        system.getTrigModule().computeAndSaveCsv(start,end,step,"result/TrigModule.csv");
+        system.getTrigModule().computeAndSaveCsv(start,end,step,"resources/TrigModule.csv");
 
         // Логарифмические функции
-        system.getLogModule().getLn().computeAndSaveCsv(start,end,step,"result/Ln.csv");
-        system.getLogModule().getLog2().computeAndSaveCsv(start,end,step,"result/Log2.csv");
-        system.getLogModule().getLog3().computeAndSaveCsv(start,end,step,"result/Log3.csv");
+        system.getLogModule().getLn().computeAndSaveCsv(start,end,step,"resources/Ln.csv");
+        system.getLogModule().getLog2().computeAndSaveCsv(start,end,step,"resources/Log2.csv");
+        system.getLogModule().getLog3().computeAndSaveCsv(start,end,step,"resources/Log3.csv");
 
         // Модуль LogModule
-        system.getLogModule().computeAndSaveCsv(start,end,step,"result/LogModule.csv");
+        system.getLogModule().computeAndSaveCsv(start,end,step,"resources/LogModule.csv");
 
         // Итоговая система
-        system.computeAndSaveCsv(start,end,step,"result/MainSystem.csv");
+        system.computeAndSaveCsv(start,end,step,"resources/MainSystem.csv");
 
         System.out.println("Все CSV файлы успешно созданы!");
     }
