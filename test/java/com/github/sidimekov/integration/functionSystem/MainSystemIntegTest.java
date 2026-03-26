@@ -1,4 +1,4 @@
-package java.com.github.sidimekov.integration.functionSystem;
+package com.github.sidimekov.integration.functionSystem;
 
 import com.github.sidimekov.functionSystem.MainSystem;
 import org.junit.jupiter.api.Test;

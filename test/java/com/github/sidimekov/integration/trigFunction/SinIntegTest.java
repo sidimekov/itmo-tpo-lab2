@@ -1,4 +1,4 @@
-package java.com.github.sidimekov.integration.trigFunction;
+package com.github.sidimekov.integration.trigFunction;
 
 import com.github.sidimekov.trigFunction.Sin;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package java.com.github.sidimekov.stubs;
+package com.github.sidimekov.stubs;
 
 import com.github.sidimekov.AbstractFunction;
 
