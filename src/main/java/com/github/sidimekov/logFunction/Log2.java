@@ -1,11 +1,12 @@
 package com.github.sidimekov.logFunction;
 
 import com.github.sidimekov.AbstractFunction;
+import com.github.sidimekov.Function;
 
 public class Log2 extends AbstractFunction {
-    private final Ln ln;
+    private final Function ln;
 
-    public Log2(Ln ln) {
+    public Log2(Function ln) {
         this.ln = ln;
     }
 
