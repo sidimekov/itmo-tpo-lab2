@@ -1,11 +1,12 @@
 package com.github.sidimekov.trigFunction;
 
 import com.github.sidimekov.AbstractFunction;
+import com.github.sidimekov.Function;
 
 public class Csc extends AbstractFunction {
-    private final Sin sin;
+    private final Function sin;
 
-    public Csc(Sin sin) {
+    public Csc(Function sin) {
         this.sin = sin;
     }
 

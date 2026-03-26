@@ -16,7 +16,9 @@ public class CosTest {
             -Math.PI / 4, -Math.sqrt(2) / 2,
             0.0, 0.0,
             Math.PI / 3, Math.sqrt(3) / 2,
-            -Math.PI / 2, -1.0
+            -Math.PI / 2, -1.0,
+            -Math.PI, 0.0,
+            -2 * Math.PI / 3, -Math.sqrt(3) / 2
     ));
 
     private static final double DELTA = 1e-6;
@@ -33,8 +35,16 @@ public class CosTest {
     }
 
     @Test
-    @DisplayName("косинус около пи пополам")
+    @DisplayName("косинус около пи/2")
     void shouldBeCloseToZeroAtPiOverTwoDiscontinuityForSec() {
         assertEquals(0.0, cos.compute(-Math.PI / 2), DELTA);
+    }
+
+    @Test
+    @DisplayName("косинус в разных четвертях (проверка знака)")
+    void shouldHandleSignChangeInDifferentQuadrants() {
+        // x = -Math.PI (cos = -1), x = -2*Math.PI/3 (cos = -0.5)
+        assertEquals(-1.0, cos.compute(-Math.PI), DELTA);
+        assertEquals(-0.5, cos.compute(-2 * Math.PI / 3), DELTA);
     }
 }

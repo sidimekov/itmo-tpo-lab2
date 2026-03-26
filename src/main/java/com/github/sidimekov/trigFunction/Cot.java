@@ -1,12 +1,13 @@
 package com.github.sidimekov.trigFunction;
 
 import com.github.sidimekov.AbstractFunction;
+import com.github.sidimekov.Function;
 
 public class Cot extends AbstractFunction {
-    private final Sin sin;
-    private final Cos cos;
+    private final Function sin;
+    private final Function cos;
 
-    public Cot(Sin sin, Cos cos) {
+    public Cot(Function sin, Function cos) {
         this.sin = sin;
         this.cos = cos;
     }
