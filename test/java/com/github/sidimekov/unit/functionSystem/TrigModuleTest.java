@@ -1,4 +1,4 @@
-package com.github.sidimekov.unit.functionSystem;
+package java.com.github.sidimekov.unit.functionSystem;
 
 public class TrigModuleTest {
 }

@@ -1,4 +1,4 @@
-package com.github.sidimekov.unit.trigFunction;
+package java.com.github.sidimekov.unit.trigFunction;
 
 public class SinTest {
 }

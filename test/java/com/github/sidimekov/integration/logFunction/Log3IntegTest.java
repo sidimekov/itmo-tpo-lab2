@@ -1,4 +1,4 @@
-package com.github.sidimekov.integration.logFunction;
+package java.com.github.sidimekov.integration.logFunction;
 
 import com.github.sidimekov.logFunction.*;
 import org.junit.jupiter.api.Test;

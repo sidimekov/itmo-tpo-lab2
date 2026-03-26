@@ -1,4 +1,4 @@
-package com.github.sidimekov.integration.trigFunction;
+package java.com.github.sidimekov.integration.trigFunction;
 
 import com.github.sidimekov.trigFunction.*;
 import org.junit.jupiter.api.Test;
