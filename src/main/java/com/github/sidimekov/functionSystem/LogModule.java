@@ -1,17 +1,24 @@
 package com.github.sidimekov.functionSystem;
 
 import com.github.sidimekov.AbstractFunction;
+import com.github.sidimekov.Function;
 import com.github.sidimekov.logFunction.*;
 
 public class LogModule extends AbstractFunction {
-    private final Ln ln;
-    private final Log2 log2;
-    private final Log3 log3;
+    private final Function ln;
+    private final Function log2;
+    private final Function log3;
 
     public LogModule(double eps) {
         this.ln = new Ln(eps);
         this.log2 = new Log2(ln);
         this.log3 = new Log3(ln);
+    }
+
+    public LogModule(Function ln, Function log2, Function log3) {
+        this.ln = ln;
+        this.log2 = log2;
+        this.log3 = log3;
     }
 
     @Override
@@ -33,7 +40,7 @@ public class LogModule extends AbstractFunction {
         return "LogModule";
     }
 
-    public Ln getLn() { return ln; }
-    public Log2 getLog2() { return log2; }
-    public Log3 getLog3() { return log3; }
+    public Ln getLn() { return (Ln) ln; }
+    public Log2 getLog2() { return (Log2) log2; }
+    public Log3 getLog3() { return (Log3) log3; }
 }

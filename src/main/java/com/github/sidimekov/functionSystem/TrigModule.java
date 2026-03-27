@@ -1,14 +1,15 @@
 package com.github.sidimekov.functionSystem;
 
 import com.github.sidimekov.AbstractFunction;
+import com.github.sidimekov.Function;
 import com.github.sidimekov.trigFunction.*;
 
 public class TrigModule extends AbstractFunction {
-    private final Sin sin;
-    private final Cos cos;
-    private final Cot cot;
-    private final Sec sec;
-    private final Csc csc;
+    private final Function sin;
+    private final Function cos;
+    private final Function cot;
+    private final Function sec;
+    private final Function csc;
 
     public TrigModule(double eps) {
         this.sin = new Sin(eps);
@@ -16,6 +17,14 @@ public class TrigModule extends AbstractFunction {
         this.cot = new Cot(sin, cos);
         this.sec = new Sec(cos);
         this.csc = new Csc(sin);
+    }
+
+    public TrigModule(Function sin, Function cos, Function cot, Function sec, Function csc) {
+        this.sin = sin;
+        this.cos = cos;
+        this.cot = cot;
+        this.sec = sec;
+        this.csc = csc;
     }
 
     @Override
@@ -39,9 +48,9 @@ public class TrigModule extends AbstractFunction {
         return "TrigModule";
     }
 
-    public Sin getSin() { return sin; }
-    public Cos getCos() { return cos; }
-    public Cot getCot() { return cot; }
-    public Sec getSec() { return sec; }
-    public Csc getCsc() { return csc; }
+    public Function getSin() { return sin; }
+    public Function getCos() { return cos; }
+    public Function getCot() { return cot; }
+    public Function getSec() { return sec; }
+    public Function getCsc() { return csc; }
 }
