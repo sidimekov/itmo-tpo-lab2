@@ -1,9 +1,9 @@
 package com.github.sidimekov.integration;
 
 import com.github.sidimekov.Function;
+import com.github.sidimekov.functionSystem.LogModule;
 import com.github.sidimekov.functionSystem.MainSystem;
 import com.github.sidimekov.functionSystem.TrigModule;
-import com.github.sidimekov.stubs.*;
 import com.github.sidimekov.trigFunction.Cos;
 import com.github.sidimekov.trigFunction.Cot;
 import com.github.sidimekov.trigFunction.Csc;
@@ -17,11 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class TrigStagesIntegTest {
     private static final double EPS = 1e-8;
     private static final double DELTA = 1e-5;
-
     private static final double X_VALID_TRIG = -1.0;
     private static final double X_QUADRANT_IV = -Math.PI / 4;
     private static final double X_NEAR_ZERO = -1e-6;
@@ -55,7 +57,7 @@ class TrigStagesIntegTest {
     @DisplayName("stage2_cos")
     class Stage2Cos {
         @Test
-        void shouldWorkWithRealSinAndCos() {
+        void shouldWorkWithRealSinCos() {
             assertCommonBehavior(buildSystem(buildStage2TrigModule()));
         }
     }
@@ -88,17 +90,14 @@ class TrigStagesIntegTest {
     }
 
     private MainSystem buildSystem(Function trigModule) {
-        return new MainSystem(trigModule, new LogModuleStub(buildLogResultsTable()));
+        return new MainSystem(trigModule, buildLogModuleMock(buildLogResultsTable()));
     }
 
     private void assertCommonBehavior(MainSystem system) {
         assertAll("Комплексная проверка системы по классам эквивалентности",
-                // 1. Тригонометрическая ветвь (Валидные точки)
                 () -> assertEquals(expectedTrig(X_VALID_TRIG), system.compute(X_VALID_TRIG), DELTA, "Ошибка в обычной точке x=-1"),
                 () -> assertEquals(expectedTrig(X_QUADRANT_IV), system.compute(X_QUADRANT_IV), DELTA, "Ошибка в IV четверти"),
                 () -> assertEquals(expectedTrig(X_NEAR_ZERO), system.compute(X_NEAR_ZERO), DELTA, "Ошибка вблизи нуля (слева)"),
-
-                // 2. Логарифмическая ветвь (x > 0)
                 () -> assertEquals(expectedLog(X_LOG_SMALL), system.compute(X_LOG_SMALL), DELTA, "Ошибка в лог-ветви (x < 1)"),
                 () -> assertEquals(0.0, system.compute(X_LOG_ONE), DELTA, "В точке x=1 результат должен быть 0"),
                 () -> assertEquals(expectedLog(X_LOG_BIG), system.compute(X_LOG_BIG), DELTA, "Ошибка в лог-ветви (x > 1)")
@@ -107,21 +106,21 @@ class TrigStagesIntegTest {
 
     private Function buildStage0TrigModule() {
         return new TrigModule(
-                new SinStub(buildSinTable()),
-                new CosStub(buildCosTable()),
-                new CotStub(buildCotTable()),
-                new SecStub(buildSecTable()),
-                new CscStub(buildCscTable())
+                buildSinMock(buildSinTable()),
+                buildCosMock(buildCosTable()),
+                buildCotMock(buildCotTable()),
+                buildSecMock(buildSecTable()),
+                buildCscMock(buildCscTable())
         );
     }
 
     private Function buildStage1TrigModule() {
         return new TrigModule(
                 new Sin(EPS),
-                new CosStub(buildCosTable()),
-                new CotStub(buildCotTable()),
-                new SecStub(buildSecTable()),
-                new CscStub(buildCscTable())
+                buildCosMock(buildCosTable()),
+                buildCotMock(buildCotTable()),
+                buildSecMock(buildSecTable()),
+                buildCscMock(buildCscTable())
         );
     }
 
@@ -131,9 +130,9 @@ class TrigStagesIntegTest {
         return new TrigModule(
                 sin,
                 cos,
-                new CotStub(buildCotTable()),
-                new SecStub(buildSecTable()),
-                new CscStub(buildCscTable())
+                buildCotMock(buildCotTable()),
+                buildSecMock(buildSecTable()),
+                buildCscMock(buildCscTable())
         );
     }
 
@@ -145,8 +144,8 @@ class TrigStagesIntegTest {
                 sin,
                 cos,
                 cot,
-                new SecStub(buildSecTable()),
-                new CscStub(buildCscTable())
+                buildSecMock(buildSecTable()),
+                buildCscMock(buildCscTable())
         );
     }
 
@@ -160,7 +159,7 @@ class TrigStagesIntegTest {
                 cos,
                 cot,
                 sec,
-                new CscStub(buildCscTable())
+                buildCscMock(buildCscTable())
         );
     }
 
@@ -208,6 +207,42 @@ class TrigStagesIntegTest {
         table.put(X_LOG_ONE, 0.0);
         table.put(X_LOG_BIG, expectedLog(X_LOG_BIG));
         return table;
+    }
+
+    private LogModule buildLogModuleMock(Map<Double, Double> values) {
+        LogModule logModuleMock = mock(LogModule.class);
+        when(logModuleMock.compute(anyDouble())).thenAnswer(invocation -> values.get(invocation.getArgument(0)));
+        return logModuleMock;
+    }
+
+    private Sin buildSinMock(Map<Double, Double> values) {
+        Sin sinMock = mock(Sin.class);
+        when(sinMock.compute(anyDouble())).thenAnswer(invocation -> values.get(invocation.getArgument(0)));
+        return sinMock;
+    }
+
+    private Cos buildCosMock(Map<Double, Double> values) {
+        Cos cosMock = mock(Cos.class);
+        when(cosMock.compute(anyDouble())).thenAnswer(invocation -> values.get(invocation.getArgument(0)));
+        return cosMock;
+    }
+
+    private Cot buildCotMock(Map<Double, Double> values) {
+        Cot cotMock = mock(Cot.class);
+        when(cotMock.compute(anyDouble())).thenAnswer(invocation -> values.get(invocation.getArgument(0)));
+        return cotMock;
+    }
+
+    private Sec buildSecMock(Map<Double, Double> values) {
+        Sec secMock = mock(Sec.class);
+        when(secMock.compute(anyDouble())).thenAnswer(invocation -> values.get(invocation.getArgument(0)));
+        return secMock;
+    }
+
+    private Csc buildCscMock(Map<Double, Double> values) {
+        Csc cscMock = mock(Csc.class);
+        when(cscMock.compute(anyDouble())).thenAnswer(invocation -> values.get(invocation.getArgument(0)));
+        return cscMock;
     }
 
     private double expectedTrig(double x) {

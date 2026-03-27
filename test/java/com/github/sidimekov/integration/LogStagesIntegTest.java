@@ -7,8 +7,6 @@ import com.github.sidimekov.functionSystem.TrigModule;
 import com.github.sidimekov.logFunction.Ln;
 import com.github.sidimekov.logFunction.Log2;
 import com.github.sidimekov.logFunction.Log3;
-import com.github.sidimekov.stubs.Log2Stub;
-import com.github.sidimekov.stubs.Log3Stub;
 import com.github.sidimekov.trigFunction.*;
 import com.github.sidimekov.util.SystemTestUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +15,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class LogStagesIntegTest {
     private static final double EPS = 1e-8;
@@ -64,12 +66,12 @@ class LogStagesIntegTest {
 
     private Function buildStage6LogModule() {
         Ln ln = new Ln(EPS);
-        return new LogModule(ln, new Log2Stub(buildLog2Table()), new Log3Stub(buildLog3Table()));
+        return new LogModule(ln, buildLog2Mock(buildLog2Table()), buildLog3Mock(buildLog3Table()));
     }
 
     private Function buildStage7LogModule() {
         Ln ln = new Ln(EPS);
-        return new LogModule(ln, new Log2(ln), new Log3Stub(buildLog3Table()));
+        return new LogModule(ln, new Log2(ln), buildLog3Mock(buildLog3Table()));
     }
 
     private Function buildStage8LogModule() {
@@ -91,5 +93,17 @@ class LogStagesIntegTest {
         table.put(SystemTestUtils.X_LOG_ONE, 0.0);
         table.put(SystemTestUtils.X_LOG_BIG, Math.log(SystemTestUtils.X_LOG_BIG) / Math.log(3));
         return table;
+    }
+
+    private Log2 buildLog2Mock(Map<Double, Double> values) {
+        Log2 log2Mock = mock(Log2.class);
+        when(log2Mock.compute(anyDouble())).thenAnswer(invocation -> values.get(invocation.getArgument(0)));
+        return log2Mock;
+    }
+
+    private Log3 buildLog3Mock(Map<Double, Double> values) {
+        Log3 log3Mock = mock(Log3.class);
+        when(log3Mock.compute(anyDouble())).thenAnswer(invocation -> values.get(invocation.getArgument(0)));
+        return log3Mock;
     }
 }
