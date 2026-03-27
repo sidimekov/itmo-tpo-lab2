@@ -1,33 +1,33 @@
 package com.github.sidimekov.unit.trigFunction;
 
-import com.github.sidimekov.stubs.CosStub;
-import com.github.sidimekov.stubs.SinStub;
+import com.github.sidimekov.trigFunction.Cos;
 import com.github.sidimekov.trigFunction.Cot;
+import com.github.sidimekov.trigFunction.Sin;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CotTest {
 
-    private final SinStub sinStub = new SinStub(Map.of(
-            -Math.PI / 4, -Math.sqrt(2) / 2,
-            -Math.PI / 2, -1.0,
-            -Math.PI / 6, -0.5,
-            0.0, 0.0
-    ));
-
-    private final CosStub cosStub = new CosStub(Map.of(
-            -Math.PI / 4, Math.sqrt(2) / 2,
-            -Math.PI / 2, 0.0,
-            -Math.PI / 6, Math.sqrt(3) / 2,
-            0.0, 1.0
-    ));
-
     private static final double DELTA = 1e-6;
-    private final Cot cot = new Cot(sinStub, cosStub);
+    private final Sin sinMock = mock(Sin.class);
+    private final Cos cosMock = mock(Cos.class);
+    private final Cot cot = new Cot(sinMock, cosMock);
+
+    public CotTest() {
+        when(sinMock.compute(-Math.PI / 4)).thenReturn(-Math.sqrt(2) / 2);
+        when(sinMock.compute(-Math.PI / 2)).thenReturn(-1.0);
+        when(sinMock.compute(-Math.PI / 6)).thenReturn(-0.5);
+        when(sinMock.compute(0.0)).thenReturn(0.0);
+
+        when(cosMock.compute(-Math.PI / 4)).thenReturn(Math.sqrt(2) / 2);
+        when(cosMock.compute(-Math.PI / 2)).thenReturn(0.0);
+        when(cosMock.compute(-Math.PI / 6)).thenReturn(Math.sqrt(3) / 2);
+        when(cosMock.compute(0.0)).thenReturn(1.0);
+    }
 
     @Test
     @DisplayName("котангенс в корректных точках ОДЗ")

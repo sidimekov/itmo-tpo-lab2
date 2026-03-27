@@ -1,25 +1,26 @@
 package com.github.sidimekov.unit.trigFunction;
 
-import com.github.sidimekov.stubs.CosStub;
+import com.github.sidimekov.trigFunction.Cos;
 import com.github.sidimekov.trigFunction.Sec;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SecTest {
 
-    private final CosStub cosStub = new CosStub(Map.of(
-            0.0, 1.0,
-            -Math.PI / 3, 0.5,
-            -Math.PI, -1.0,
-            -Math.PI / 2, 0.0
-    ));
-
     private static final double DELTA = 1e-6;
-    private final Sec sec = new Sec(cosStub);
+    private final Cos cosMock = mock(Cos.class);
+    private final Sec sec = new Sec(cosMock);
+
+    public SecTest() {
+        when(cosMock.compute(0.0)).thenReturn(1.0);
+        when(cosMock.compute(-Math.PI / 3)).thenReturn(0.5);
+        when(cosMock.compute(-Math.PI)).thenReturn(-1.0);
+        when(cosMock.compute(-Math.PI / 2)).thenReturn(0.0);
+    }
 
     @Test
     @DisplayName("секанс в корректных точках ОДЗ")

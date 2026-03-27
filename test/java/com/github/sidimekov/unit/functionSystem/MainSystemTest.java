@@ -1,8 +1,8 @@
 package com.github.sidimekov.unit.functionSystem;
 
+import com.github.sidimekov.functionSystem.LogModule;
 import com.github.sidimekov.functionSystem.MainSystem;
-import com.github.sidimekov.stubs.LogModuleStub;
-import com.github.sidimekov.stubs.TrigModuleStub;
+import com.github.sidimekov.functionSystem.TrigModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,13 +12,15 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MainSystemTest {
     private static final double DELTA = 1e-9;
 
     private MainSystem mainSystem;
-    private TrigModuleStub trigModuleStub;
-    private LogModuleStub logModuleStub;
+    private TrigModule trigModuleMock;
+    private LogModule logModuleMock;
 
     @BeforeEach
     void setUp() {
@@ -34,10 +36,13 @@ public class MainSystemTest {
                 2.0, calculateLogExpected(2.0)
         );
 
-        trigModuleStub = new TrigModuleStub(trigTable);
-        logModuleStub = new LogModuleStub(logTable);
+        trigModuleMock = mock(TrigModule.class);
+        logModuleMock = mock(LogModule.class);
 
-        mainSystem = new MainSystem(trigModuleStub, logModuleStub);
+        trigTable.forEach((x, value) -> when(trigModuleMock.compute(x)).thenReturn(value));
+        logTable.forEach((x, value) -> when(logModuleMock.compute(x)).thenReturn(value));
+
+        mainSystem = new MainSystem(trigModuleMock, logModuleMock);
     }
 
     @Nested
@@ -45,11 +50,11 @@ public class MainSystemTest {
     class TrigBranch {
 
         @Test
-        @DisplayName("должен совпадать с TrigModuleStub на -1, -пи/2 и 0")
+        @DisplayName("должен совпадать с TrigModule mock на -1, -пи/2 и 0")
         void shouldMatchTrigStubForNonPositivePoints() {
             double[] points = {-1.0, -Math.PI / 2, 0.0};
             for (double x : points) {
-                assertEquals(trigModuleStub.compute(x), mainSystem.compute(x), DELTA,
+                assertEquals(trigModuleMock.compute(x), mainSystem.compute(x), DELTA,
                         "Ошибка в x = " + x);
             }
         }
@@ -67,11 +72,11 @@ public class MainSystemTest {
     class LogBranch {
 
         @Test
-        @DisplayName("Должен корректно выбирать лог ветвь для положительных x")
+        @DisplayName("Должен корректно выбирать лог ветвь для положительных x (LogModule mock)")
         void shouldMatchLogStubForPositivePoints() {
             double[] points = {0.1, 1.0, 2.0};
             for (double x : points) {
-                assertEquals(logModuleStub.compute(x), mainSystem.compute(x), DELTA,
+                assertEquals(logModuleMock.compute(x), mainSystem.compute(x), DELTA,
                         "Ошибка в x = " + x);
             }
         }

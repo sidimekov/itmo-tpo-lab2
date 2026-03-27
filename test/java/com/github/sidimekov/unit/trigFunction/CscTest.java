@@ -1,26 +1,27 @@
 package com.github.sidimekov.unit.trigFunction;
 
-import com.github.sidimekov.stubs.SinStub;
 import com.github.sidimekov.trigFunction.Csc;
+import com.github.sidimekov.trigFunction.Sin;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CscTest {
 
-    private final SinStub sinStub = new SinStub(Map.of(
-            -Math.PI / 2, -1.0,
-            -Math.PI / 6, -0.5,
-            0.0, 0.0,
-            -Math.PI, 0.0
-    ));
-
     private static final double DELTA = 1e-6;
-    private final Csc csc = new Csc(sinStub);
+    private final Sin sinMock = mock(Sin.class);
+    private final Csc csc = new Csc(sinMock);
+
+    public CscTest() {
+        when(sinMock.compute(-Math.PI / 2)).thenReturn(-1.0);
+        when(sinMock.compute(-Math.PI / 6)).thenReturn(-0.5);
+        when(sinMock.compute(0.0)).thenReturn(0.0);
+        when(sinMock.compute(-Math.PI)).thenReturn(0.0);
+    }
 
     @Test
     @DisplayName("косеканс в корректных точках ОДЗ")

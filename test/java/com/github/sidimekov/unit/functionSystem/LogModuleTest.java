@@ -1,9 +1,9 @@
 package com.github.sidimekov.unit.functionSystem;
 
 import com.github.sidimekov.functionSystem.LogModule;
-import com.github.sidimekov.stubs.LnStub;
-import com.github.sidimekov.stubs.Log2Stub;
-import com.github.sidimekov.stubs.Log3Stub;
+import com.github.sidimekov.logFunction.Ln;
+import com.github.sidimekov.logFunction.Log2;
+import com.github.sidimekov.logFunction.Log3;
 import com.github.sidimekov.util.LogTestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +13,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @DisplayName("Тесты модуля логарифмов")
 public class LogModuleTest {
@@ -26,6 +29,9 @@ public class LogModuleTest {
     private static final double X_BASE_THREE = 3.0;
 
     private LogModule logModule;
+    private Ln lnMock;
+    private Log2 log2Mock;
+    private Log3 log3Mock;
 
     @BeforeEach
     void setUp() {
@@ -33,10 +39,18 @@ public class LogModuleTest {
         Map<Double, Double> log2Values = LogTestData.getLog2Points();
         Map<Double, Double> log3Values = LogTestData.getLog3Points();
 
+        lnMock = mock(Ln.class);
+        log2Mock = mock(Log2.class);
+        log3Mock = mock(Log3.class);
+
+        when(lnMock.compute(anyDouble())).thenAnswer(invocation -> lnValues.get(invocation.getArgument(0)));
+        when(log2Mock.compute(anyDouble())).thenAnswer(invocation -> log2Values.get(invocation.getArgument(0)));
+        when(log3Mock.compute(anyDouble())).thenAnswer(invocation -> log3Values.get(invocation.getArgument(0)));
+
         logModule = new LogModule(
-                new LnStub(lnValues),
-                new Log2Stub(log2Values),
-                new Log3Stub(log3Values)
+                lnMock,
+                log2Mock,
+                log3Mock
         );
     }
 

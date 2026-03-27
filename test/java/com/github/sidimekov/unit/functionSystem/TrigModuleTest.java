@@ -1,11 +1,11 @@
 package com.github.sidimekov.unit.functionSystem;
 
 import com.github.sidimekov.functionSystem.TrigModule;
-import com.github.sidimekov.stubs.CosStub;
-import com.github.sidimekov.stubs.CotStub;
-import com.github.sidimekov.stubs.CscStub;
-import com.github.sidimekov.stubs.SecStub;
-import com.github.sidimekov.stubs.SinStub;
+import com.github.sidimekov.trigFunction.Cos;
+import com.github.sidimekov.trigFunction.Cot;
+import com.github.sidimekov.trigFunction.Csc;
+import com.github.sidimekov.trigFunction.Sec;
+import com.github.sidimekov.trigFunction.Sin;
 import com.github.sidimekov.util.TrigTestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +15,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TrigModuleTest {
     private static final double EPS = 1e-9;
@@ -27,6 +30,11 @@ public class TrigModuleTest {
     private static final double X_ZERO_CRITICAL = 0.0;
 
     private TrigModule trigModule;
+    private Sin sinMock;
+    private Cos cosMock;
+    private Cot cotMock;
+    private Sec secMock;
+    private Csc cscMock;
 
     @BeforeEach
     void setUp() {
@@ -36,12 +44,24 @@ public class TrigModuleTest {
         Map<Double, Double> secValues = TrigTestData.getSecPoints();
         Map<Double, Double> cscValues = TrigTestData.getCscPoints();
 
+        sinMock = mock(Sin.class);
+        cosMock = mock(Cos.class);
+        cotMock = mock(Cot.class);
+        secMock = mock(Sec.class);
+        cscMock = mock(Csc.class);
+
+        when(sinMock.compute(anyDouble())).thenAnswer(invocation -> sinValues.get(invocation.getArgument(0)));
+        when(cosMock.compute(anyDouble())).thenAnswer(invocation -> cosValues.get(invocation.getArgument(0)));
+        when(cotMock.compute(anyDouble())).thenAnswer(invocation -> cotValues.get(invocation.getArgument(0)));
+        when(secMock.compute(anyDouble())).thenAnswer(invocation -> secValues.get(invocation.getArgument(0)));
+        when(cscMock.compute(anyDouble())).thenAnswer(invocation -> cscValues.get(invocation.getArgument(0)));
+
         trigModule = new TrigModule(
-                new SinStub(sinValues),
-                new CosStub(cosValues),
-                new CotStub(cotValues),
-                new SecStub(secValues),
-                new CscStub(cscValues)
+                sinMock,
+                cosMock,
+                cotMock,
+                secMock,
+                cscMock
         );
     }
 
