@@ -5,7 +5,7 @@ import com.github.sidimekov.util.SystemTestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class BottomUpFullSystemIntegTest {
+class FullSystemIntegTest {
     private static final double EPS = 1e-8;
     private static final double DELTA = 1e-5;
 

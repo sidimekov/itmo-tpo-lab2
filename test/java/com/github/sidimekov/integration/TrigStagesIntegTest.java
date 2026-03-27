@@ -18,7 +18,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BottomUpTrigStagesIntegTest {
+class TrigStagesIntegTest {
     private static final double EPS = 1e-8;
     private static final double DELTA = 1e-5;
 
