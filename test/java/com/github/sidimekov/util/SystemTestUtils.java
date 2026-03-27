@@ -53,7 +53,12 @@ public final class SystemTestUtils {
                 () -> assertEquals(expectedTrig(X_QUADRANT_IV), system.compute(X_QUADRANT_IV), delta, "Ошибка в IV четверти"),
                 () -> assertEquals(expectedTrig(X_NEAR_ZERO), system.compute(X_NEAR_ZERO), delta, "Ошибка вблизи нуля (слева)"),
 
-                // 2. Логарифмическая ветвь (x > 0)
+                // 2. Точки разрыва (Ожидается NaN)
+                () -> assertIsDiscontinuity(system.compute(X_SIN_DISCONTINUITY), "Ожидается разрыв в точке x=-пи"),
+                () -> assertIsDiscontinuity(system.compute(X_SEC_DISCONTINUITY), "Ожидается разрыв в точке x=-пи/2"),
+                () -> assertIsDiscontinuity(system.compute(X_ZERO), "Ожидается разрыв в точке x=0"),
+
+                // 3. Логарифмическая ветвь (x > 0)
                 () -> assertEquals(expectedLog(X_LOG_SMALL), system.compute(X_LOG_SMALL), delta, "Ошибка в лог-ветви (x < 1)"),
                 () -> assertEquals(0.0, system.compute(X_LOG_ONE), delta, "В точке x=1 результат должен быть 0"),
                 () -> assertEquals(expectedLog(X_LOG_BIG), system.compute(X_LOG_BIG), delta, "Ошибка в лог-ветви (x > 1)")

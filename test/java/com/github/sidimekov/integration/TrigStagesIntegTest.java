@@ -98,12 +98,7 @@ class TrigStagesIntegTest {
                 () -> assertEquals(expectedTrig(X_QUADRANT_IV), system.compute(X_QUADRANT_IV), DELTA, "Ошибка в IV четверти"),
                 () -> assertEquals(expectedTrig(X_NEAR_ZERO), system.compute(X_NEAR_ZERO), DELTA, "Ошибка вблизи нуля (слева)"),
 
-                // 2. Точки разрыва (Ожидается NaN)
-                () -> assertTrue(Double.isNaN(system.compute(X_SIN_DISCONTINUITY)), "Должен быть NaN в точке разрыва sin (x=-пи)"),
-                () -> assertTrue(Double.isNaN(system.compute(X_SEC_DISCONTINUITY)), "Должен быть NaN в точке разрыва cos (x=-пи/2)"),
-                () -> assertTrue(Double.isNaN(system.compute(X_ZERO)), "Должен быть NaN в граничной точке x=0"),
-
-                // 3. Логарифмическая ветвь (x > 0)
+                // 2. Логарифмическая ветвь (x > 0)
                 () -> assertEquals(expectedLog(X_LOG_SMALL), system.compute(X_LOG_SMALL), DELTA, "Ошибка в лог-ветви (x < 1)"),
                 () -> assertEquals(0.0, system.compute(X_LOG_ONE), DELTA, "В точке x=1 результат должен быть 0"),
                 () -> assertEquals(expectedLog(X_LOG_BIG), system.compute(X_LOG_BIG), DELTA, "Ошибка в лог-ветви (x > 1)")
